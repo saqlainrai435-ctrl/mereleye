@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saqlain Ahmad | Official Professional Portal & Pakistan Updates</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f6ff',
+                            100: '#e0ecff',
+                            500: '#0284c7',
+                            600: '#0269a0',
+                            750: '#0b2545',
+                            900: '#06162a',
+                        },
+                        pakGreen: '#004d25',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7fb; color: #1e293b; }
+        .glass-header { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); }
+        .hero-gradient { background: linear-gradient(135deg, #0b2545 0%, #0269a0 50%, #0284c7 100%); }
+        .custom-shadow { box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.1); }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="saqlainPortalApp()" class="antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="sticky top-0 z-50 glass-header border-b border-gray-200 shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" @click="activePage = 'home'">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-750 to-brand-500 flex items-center justify-center text-white shadow-md font-black text-lg">
+                    SA
+                </div>
+                <div>
+                    <span class="text-xl font-black text-brand-750 tracking-tight flex items-center gap-1.5">
+                        SAQLAIN <span class="text-brand-500">AHMAD</span> <span class="text-[10px] bg-brand-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">PORTAL</span>
+                    </span>
+                    <span class="text-xs text-gray-500 font-medium block">Professional Pakistan Information Hub</span>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center space-x-6 text-sm font-semibold text-gray-700">
+                <button @click="activePage = 'home'" :class="activePage === 'home' ? 'text-brand-500 border-b-2 border-brand-500 pb-1' : 'hover:text-brand-500 transition-colors'">Home</button>
+                <button @click="activePage = 'jobs'" :class="activePage === 'jobs' ? 'text-brand-500 border-b-2 border-brand-500 pb-1' : 'hover:text-brand-500 transition-colors'">Government Jobs</button>
+                <button @click="activePage = 'schemes'" :class="activePage === 'schemes' ? 'text-brand-500 border-b-2 border-brand-500 pb-1' : 'hover:text-brand-500 transition-colors'">Government Schemes</button>
+                <button @click="activePage = 'fuel'" :class="activePage === 'fuel' ? 'text-brand-500 border-b-2 border-brand-500 pb-1' : 'hover:text-brand-500 transition-colors'">Petrol & Fuel Prices</button>
+                <button @click="activePage = 'news'" :class="activePage === 'news' ? 'text-brand-500 border-b-2 border-brand-500 pb-1' : 'hover:text-brand-500 transition-colors'">Pakistan Updates</button>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button @click="activePage = 'jobs'" class="hidden sm:flex bg-gradient-to-r from-brand-500 to-brand-750 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-brand-500/20 hover:opacity-95 transition items-center gap-2">
+                    <i class="fa-solid fa-briefcase"></i> Explore Jobs
+                </button>
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden text-gray-700 text-xl p-2 focus:outline-none">
+                    <i class="fa-solid" :class="mobileMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div x-show="mobileMenuOpen" x-cloak class="lg:hidden bg-white border-b border-gray-200 px-6 py-4 space-y-3 shadow-xl">
+            <button @click="activePage = 'home'; mobileMenuOpen = false" class="block w-full text-left font-semibold text-gray-700 py-2">Home Landing Page</button>
+            <button @click="activePage = 'jobs'; mobileMenuOpen = false" class="block w-full text-left font-semibold text-gray-700 py-2">Government Jobs</button>
+            <button @click="activePage = 'schemes'; mobileMenuOpen = false" class="block w-full text-left font-semibold text-gray-700 py-2">Government Schemes</button>
+            <button @click="activePage = 'fuel'; mobileMenuOpen = false" class="block w-full text-left font-semibold text-gray-700 py-2">Petrol & Fuel Prices</button>
+            <button @click="activePage = 'news'; mobileMenuOpen = false" class="block w-full text-left font-semibold text-gray-700 py-2">Pakistan Updates & News</button>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+
+        <!-- ==================== PAGE 1: HOME LANDING PAGE ==================== -->
+        <div x-show="activePage === 'home'" x-cloak class="space-y-16 pb-16">
+            
+            <!-- Hero Banner -->
+            <section class="hero-gradient text-white py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+                <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider text-cyan-200">
+                            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Curated by Saqlain Ahmad &bull; Live Feed
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                            Professional Portal for Pakistan's Latest Verified Information
+                        </h1>
+                        <p class="text-gray-200 text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
+                            Welcome to the official professional platform managed by Saqlain Ahmad. Get real-time verified OGRA petroleum prices, weather updates across major cities, government job listings, and public welfare schemes.
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <button @click="activePage = 'jobs'" class="bg-white text-brand-750 font-bold px-7 py-4 rounded-xl shadow-lg hover:bg-cyan-50 transition flex items-center gap-2">
+                                <i class="fa-solid fa-briefcase text-brand-500"></i> Explore Government Jobs
+                            </button>
+                            <button @click="activePage = 'fuel'" class="bg-cyan-600/60 border border-cyan-400/40 text-white font-bold px-7 py-4 rounded-xl hover:bg-cyan-600 transition flex items-center gap-2 backdrop-blur-md">
+                                <i class="fa-solid fa-gas-pump"></i> Check Fuel Rates
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Weather & Quick Fuel Card -->
+                    <div class="lg:col-span-5 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-city text-2xl text-cyan-300"></i>
+                                <div>
+                                    <h3 class="font-bold text-lg text-white" x-text="currentWeatherCity.name"></h3>
+                                    <p class="text-xs text-gray-300" x-text="currentWeatherCity.condition"></p>
+                                </div>
+                            </div>
+                            <select x-model="selectedCityWeather" class="bg-brand-900/90 text-white text-xs font-semibold px-3 py-2 rounded-xl border border-white/20 focus:outline-none">
+                                <template x-for="city in weatherCities">
+                                    <option :value="city.id" x-text="city.name"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="bg-black/20 p-3 rounded-2xl border border-white/10">
+                                <span class="text-xs text-gray-300 block">Temperature</span>
+                                <span class="text-2xl font-black text-white" x-text="currentWeatherCity.temp + '°C'"></span>
+                            </div>
+                            <div class="bg-black/20 p-3 rounded-2xl border border-white/10">
+                                <span class="text-xs text-gray-300 block">Humidity</span>
+                                <span class="text-2xl font-black text-cyan-300" x-text="currentWeatherCity.humidity + '%'"></span>
+                            </div>
+                            <div class="bg-black/20 p-3 rounded-2xl border border-white/10">
+                                <span class="text-xs text-gray-300 block">Wind</span>
+                                <span class="text-2xl font-black text-white" x-text="currentWeatherCity.wind"></span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-blue-900/60 to-slate-900/60 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">
+                                    <i class="fa-solid fa-gas-pump"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-300 block">Current Petrol (OGRA)</span>
+                                    <span class="text-lg font-black text-white" x-text="'PKR ' + fuelData.petrol + ' / liter'"></span>
+                                </div>
+                            </div>
+                            <button @click="activePage = 'fuel'" class="text-xs font-bold text-cyan-300 hover:underline">View History &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Stats & Highlights -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-3xl custom-shadow border border-gray-100 flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-500 flex items-center justify-center text-2xl font-bold">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 font-bold uppercase">Active Vacancies</span>
+                            <h3 class="text-2xl font-black text-brand-700">142+ Jobs</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl custom-shadow border border-gray-100 flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 font-bold uppercase">Welfare Schemes</span>
+                            <h3 class="text-2xl font-black text-brand-700">38 Active</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl custom-shadow border border-gray-100 flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold">
+                            <i class="fa-solid fa-gas-pump"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 font-bold uppercase">Petrol Price</span>
+                            <h3 class="text-2xl font-black text-brand-700" x-text="'Rs. ' + fuelData.petrol"></h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl custom-shadow border border-gray-100 flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl font-bold">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 font-bold uppercase">Portal Visitors</span>
+                            <h3 class="text-2xl font-black text-brand-700">24,850+</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Section Previews -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Preview 1: Latest Govt Jobs -->
+                    <div class="bg-white p-8 rounded-3xl custom-shadow border border-gray-100 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-brand-500 bg-brand-50 px-3 py-1 rounded-full">Recruitment</span>
+                                <h3 class="text-2xl font-black text-brand-750 mt-2">Latest Government Jobs</h3>
+                            </div>
+                            <button @click="activePage = 'jobs'" class="text-xs font-bold text-brand-500 hover:underline">View All &rarr;</button>
+                        </div>
+                        <div class="space-y-4">
+                            <template x-for="job in jobs.slice(0, 3)">
+                                <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] font-bold text-brand-600 bg-brand-100 px-2 py-0.5 rounded" x-text="job.department"></span>
+                                        <h4 class="font-bold text-sm text-brand-750" x-text="job.title"></h4>
+                                        <p class="text-xs text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i> <span x-text="job.location"></span> &bull; Deadline: <span x-text="job.deadline"></span></p>
+                                    </div>
+                                    <button @click="activePage = 'jobs'" class="bg-brand-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow hover:bg-brand-600 transition">Apply</button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Preview 2: Latest News & Updates -->
+                    <div class="bg-white p-8 rounded-3xl custom-shadow border border-gray-100 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-brand-500 bg-brand-50 px-3 py-1 rounded-full">Newsroom</span>
+                                <h3 class="text-2xl font-black text-brand-750 mt-2">Pakistan News & Updates</h3>
+                            </div>
+                            <button @click="activePage = 'news'" class="text-xs font-bold text-brand-500 hover:underline">View All &rarr;</button>
+                        </div>
+                        <div class="space-y-4">
+                            <template x-for="item in newsList.slice(0, 3)">
+                                <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-1">
+                                    <div class="flex justify-between text-[11px] text-gray-400">
+                                        <span class="font-bold text-brand-600" x-text="item.category"></span>
+                                        <span x-text="item.date"></span>
+                                    </div>
+                                    <h4 class="font-bold text-sm text-brand-750" x-text="item.title"></h4>
+                                    <p class="text-xs text-gray-500 line-clamp-1" x-text="item.snippet"></p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PAGE 2: GOVERNMENT JOBS ==================== -->
+        <div x-show="activePage === 'jobs'" x-cloak class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="bg-brand-900 text-white p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-3 py-1 rounded-full">Verified Vacancies</span>
+                    <h1 class="text-3xl sm:text-4xl font-black mt-2">Government Jobs Portal</h1>
+                    <p class="text-gray-300 text-sm mt-1">Browse and search official federal and provincial recruitment advertisements across Pakistan.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <template x-for="cat in jobCategories">
+                        <button @click="selectedJobCategory = cat.id" :class="selectedJobCategory === cat.id ? 'bg-cyan-500 text-brand-900 font-bold shadow' : 'bg-white/10 text-white hover:bg-white/20'" class="px-4 py-2 rounded-xl text-xs font-bold transition" x-text="cat.name"></button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Search input -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3">
+                <i class="fa-solid fa-search text-gray-400 ml-2"></i>
+                <input type="text" x-model="jobSearchQuery" placeholder="Search by job title, department, or location (e.g. FPSC, Lahore, Doctor)..." class="w-full text-sm focus:outline-none bg-transparent">
+            </div>
+
+            <!-- Jobs Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="job in filteredJobs" :key="job.id">
+                    <div class="bg-white rounded-3xl p-6 custom-shadow border border-gray-100 flex flex-col justify-between hover:border-brand-500 transition group">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between">
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-brand-600 border border-blue-100" x-text="job.department"></span>
+                                <span class="text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full">Deadline: <span x-text="job.deadline"></span></span>
+                            </div>
+                            <h3 class="font-bold text-lg text-brand-750 group-hover:text-brand-500 transition line-clamp-2" x-text="job.title"></h3>
+                            <p class="text-xs text-gray-500 line-clamp-2" x-text="job.description"></p>
+                            
+                            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100 text-xs text-gray-600">
+                                <div><i class="fa-solid fa-location-dot text-brand-500 mr-1"></i> <span x-text="job.location"></span></div>
+                                <div><i class="fa-solid fa-graduation-cap text-brand-500 mr-1"></i> <span x-text="job.education"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 mt-4 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-xs text-gray-400">Ref: <span x-text="job.ref"></span></span>
+                            <button @click="openJobModal(job)" class="bg-brand-50 text-brand-600 hover:bg-brand-500 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                                View Details <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- ==================== PAGE 3: GOVERNMENT SCHEMES ==================== -->
+        <div x-show="activePage === 'schemes'" x-cloak class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="bg-brand-900 text-white p-8 rounded-3xl shadow-xl">
+                <span class="text-xs font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-3 py-1 rounded-full">Public Welfare Initiatives</span>
+                <h1 class="text-3xl sm:text-4xl font-black mt-2">Government Schemes & Financial Programs</h1>
+                <p class="text-gray-300 text-sm mt-1">Explore youth loan programs, student scholarships, housing schemes, and provincial welfare packages.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <template x-for="scheme in schemes">
+                    <div class="bg-white rounded-3xl p-6 custom-shadow border border-gray-100 flex flex-col justify-between hover:shadow-lg transition">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-500 flex items-center justify-center text-xl font-bold">
+                                <i :class="scheme.icon"></i>
+                            </div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full" x-text="scheme.status"></span>
+                            <h3 class="font-bold text-base text-brand-750" x-text="scheme.title"></h3>
+                            <p class="text-xs text-gray-500 leading-relaxed" x-text="scheme.description"></p>
+                        </div>
+                        <div class="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-brand-600">
+                            <span>Deadline: <span x-text="scheme.deadline"></span></span>
+                            <button @click="alert('Redirecting to official application portal...') " class="hover:underline">Apply Now &rarr;</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- ==================== PAGE 4: PETROL & FUEL PRICES ==================== -->
+        <div x-show="activePage === 'fuel'" x-cloak class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="bg-brand-900 text-white p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-3 py-1 rounded-full">OGRA Official Rates</span>
+                    <h1 class="text-3xl sm:text-4xl font-black mt-2">Pakistan Petroleum & Fuel Prices</h1>
+                    <p class="text-gray-300 text-sm mt-1">Fortnightly updated petroleum prices with historical trend charts and price change indicators.</p>
+                </div>
+                <div class="bg-white/10 px-4 py-2 rounded-xl border border-white/20 text-xs font-semibold">
+                    <i class="fa-solid fa-clock text-cyan-300 mr-1"></i> Effective Date: <span class="text-white font-bold" x-text="fuelData.effectiveDate"></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50/50 p-6 rounded-3xl border border-blue-100">
+                        <span class="text-xs font-bold text-blue-600 uppercase">Petrol (Super)</span>
+                        <div class="text-3xl font-black text-brand-750 mt-2" x-text="'Rs. ' + fuelData.petrol"></div>
+                        <span class="text-xs font-medium text-emerald-600 mt-1 block"><i class="fa-solid fa-arrow-down mr-1"></i> Rs. 4.50 decrease</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50/50 p-6 rounded-3xl border border-blue-100">
+                        <span class="text-xs font-bold text-blue-600 uppercase">High-Speed Diesel</span>
+                        <div class="text-3xl font-black text-brand-750 mt-2" x-text="'Rs. ' + fuelData.diesel"></div>
+                        <span class="text-xs font-medium text-emerald-600 mt-1 block"><i class="fa-solid fa-arrow-down mr-1"></i> Rs. 2.30 decrease</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-gray-50 to-slate-100 p-6 rounded-3xl border border-gray-200 sm:col-span-2">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs font-bold text-gray-600 uppercase">Kerosene Oil</span>
+                                <div class="text-2xl font-black text-brand-750 mt-1" x-text="'Rs. ' + fuelData.kerosene"></div>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-gray-600 uppercase">Light Diesel (LDO)</span>
+                                <div class="text-2xl font-black text-brand-750 mt-1" x-text="'Rs. ' + fuelData.ldo"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-white p-6 rounded-3xl custom-shadow border border-gray-100">
+                    <h3 class="font-bold text-sm text-gray-700 mb-4 flex items-center justify-between">
+                        <span>6-Month Petrol Price Trend (PKR)</span>
+                        <span class="text-xs text-brand-500 font-normal">Source: OGRA & Ministry of Finance</span>
+                    </h3>
+                    <div class="h-64 relative">
+                        <canvas id="petrolChartPage"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PAGE 5: PAKISTAN UPDATES & NEWS ==================== -->
+        <div x-show="activePage === 'news'" x-cloak class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            <div class="bg-brand-900 text-white p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-3 py-1 rounded-full">Verified Newsroom</span>
+                    <h1 class="text-3xl sm:text-4xl font-black mt-2">Pakistan Updates & Announcements</h1>
+                    <p class="text-gray-300 text-sm mt-1">Official government notifications, economic developments, weather alerts, and important bulletins.</p>
+                </div>
+                <div class="w-full md:w-72">
+                    <input type="text" x-model="newsSearchQuery" placeholder="Search news..." class="w-full bg-white/10 border border-white/20 text-white placeholder-gray-400 text-xs px-4 py-3 rounded-xl focus:outline-none">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <template x-for="news in filteredNews" :key="news.title">
+                    <div class="bg-white rounded-3xl overflow-hidden custom-shadow border border-gray-100 flex flex-col justify-between">
+                        <div class="p-6 space-y-3">
+                            <div class="flex items-center justify-between text-xs text-gray-400">
+                                <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-full font-semibold" x-text="news.category"></span>
+                                <span x-text="news.date"></span>
+                            </div>
+                            <h3 class="font-bold text-lg text-brand-750 line-clamp-2" x-text="news.title"></h3>
+                            <p class="text-xs text-gray-500 line-clamp-3" x-text="news.snippet"></p>
+                        </div>
+                        <div class="px-6 pb-6 pt-0 flex items-center justify-between text-xs font-semibold text-brand-600 border-t border-gray-100 pt-4">
+                            <span>Source: <span x-text="news.source"></span></span>
+                            <button @click="alert('Opening full article...')" class="hover:underline">Read Full Article &rarr;</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Job Details Modal -->
+    <div x-show="jobModalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <button @click="jobModalOpen = false" class="absolute top-6 right-6 text-gray-400 hover:text-gray-700 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="space-y-2">
+                <span class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-full" x-text="activeJob.department"></span>
+                <h3 class="text-xl font-black text-brand-750" x-text="activeJob.title"></h3>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed" x-text="activeJob.description"></p>
+            <div class="bg-gray-50 p-4 rounded-2xl space-y-2 text-xs text-gray-700">
+                <div class="flex justify-between"><strong>Location:</strong> <span x-text="activeJob.location"></span></div>
+                <div class="flex justify-between"><strong>Education:</strong> <span x-text="activeJob.education"></span></div>
+                <div class="flex justify-between"><strong>Deadline:</strong> <span x-text="activeJob.deadline"></span></div>
+                <div class="flex justify-between"><strong>Reference:</strong> <span x-text="activeJob.ref"></span></div>
+            </div>
+            <div class="pt-2 flex gap-3">
+                <button @click="alert('Redirecting to official application portal...')" class="flex-1 bg-brand-500 text-white font-bold py-3 rounded-xl text-center text-xs shadow hover:bg-brand-600 transition">
+                    Apply on Official Website
+                </button>
+                <button @click="jobModalOpen = false" class="px-5 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl text-xs hover:bg-gray-200 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-900 text-white pt-12 pb-8 border-t border-white/10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white font-black">
+                        SA
+                    </div>
+                    <span class="text-lg font-black tracking-tight">SAQLAIN <span class="text-cyan-400">AHMAD</span></span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Official professional information platform managed by Saqlain Ahmad. Delivering verified updates on weather, OGRA petroleum prices, government jobs, and welfare schemes.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm text-cyan-300 mb-4">Portal Navigation</h4>
+                <ul class="space-y-2 text-xs text-gray-300">
+                    <li><button @click="activePage = 'home'" class="hover:text-white">Home Landing Page</button></li>
+                    <li><button @click="activePage = 'jobs'" class="hover:text-white">Government Jobs</button></li>
+                    <li><button @click="activePage = 'schemes'" class="hover:text-white">Government Schemes</button></li>
+                    <li><button @click="activePage = 'fuel'" class="hover:text-white">Petrol & Fuel Prices</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm text-cyan-300 mb-4">Official Sources</h4>
+                <ul class="space-y-2 text-xs text-gray-300">
+                    <li>OGRA (Oil & Gas Regulatory Authority)</li>
+                    <li>FPSC & PPSC Job Portals</li>
+                    <li>Pakistan Meteorological Department</li>
+                    <li>Ministry of Finance Pakistan</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm text-cyan-300 mb-4">Newsletter Alerts</h4>
+                <p class="text-xs text-gray-400 mb-3">Get instant verified alerts for petrol price changes and government jobs.</p>
+                <div class="flex gap-2">
+                    <input type="email" placeholder="Enter your email..." class="bg-white/10 border border-white/20 px-3 py-2 rounded-xl text-xs text-white placeholder-gray-400 w-full focus:outline-none">
+                    <button @click="alert('Subscribed successfully!')" class="bg-cyan-500 text-brand-900 font-bold px-4 py-2 rounded-xl text-xs hover:bg-cyan-400 transition">Join</button>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400">
+            <p>&copy; 2026 Saqlain Ahmad Portal. All rights reserved. Built for professional Pakistan information publishing.</p>
+            <p>Designed with Corporate Blue & White Theme</p>
+        </div>
+    </footer>
+
+    <!-- Application Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('petrolChartPage').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Nov 2025', 'Dec 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026', 'Current'],
+                    datasets: [{
+                        label: 'Petrol Price (PKR/liter)',
+                        data: [305.50, 298.20, 292.00, 288.50, 282.40, 278.50],
+                        borderColor: '#0284c7',
+                        backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+
+        function saqlainPortalApp() {
+            return {
+                activePage: 'home',
+                mobileMenuOpen: false,
+                selectedCityWeather: 'islamabad',
+                selectedJobCategory: 'all',
+                jobSearchQuery: '',
+                newsSearchQuery: '',
+                jobModalOpen: false,
+                activeJob: {},
+
+                weatherCities: [
+                    { id: 'islamabad', name: 'Islamabad', temp: 24, condition: 'Sunny & Clear', humidity: 45, wind: '12 km/h' },
+                    { id: 'lahore', name: 'Lahore', temp: 28, condition: 'Hazy Sunshine', humidity: 52, wind: '10 km/h' },
+                    { id: 'karachi', name: 'Karachi', temp: 31, condition: 'Coastal Breeze', humidity: 68, wind: '18 km/h' },
+                    { id: 'peshawar', name: 'Peshawar', temp: 26, condition: 'Clear Sky', humidity: 40, wind: '14 km/h' },
+                    { id: 'quetta', name: 'Quetta', temp: 19, condition: 'Pleasant & Cool', humidity: 30, wind: '16 km/h' }
+                ],
+
+                get currentWeatherCity() {
+                    return this.weatherCities.find(c => c.id === this.selectedCityWeather) || this.weatherCities[0];
+                },
+
+                fuelData: {
+                    petrol: '278.50',
+                    diesel: '284.20',
+                    kerosene: '186.40',
+                    ldo: '168.10',
+                    change: '- Rs. 4.50',
+                    effectiveDate: '1st April 2026'
+                },
+
+                jobCategories: [
+                    { id: 'all', name: 'All Jobs' },
+                    { id: 'federal', name: 'Federal / FPSC' },
+                    { id: 'punjab', name: 'Punjab' },
+                    { id: 'sindh', name: 'Sindh' },
+                    { id: 'kpk', name: 'KPK' }
+                ],
+
+                jobs: [
+                    { id: 1, title: 'Assistant Director (BS-17)', department: 'Federal Public Service Commission (FPSC)', location: 'Islamabad / Federal', education: 'Master / Bachelor', deadline: '15 April 2026', ref: 'FPSC-ADV-04/2026', description: 'Applications are invited from eligible Pakistani nationals for permanent recruitment in Federal Ministries. Competitive salary and medical allowance as per federal pay scale.' },
+                    { id: 2, title: 'Medical Officers (BS-18)', department: 'Punjab Specialized Healthcare', location: 'Lahore, Faisalabad', education: 'MBBS / FCPS', deadline: '20 April 2026', ref: 'PPSC-99/2026', description: 'PPSC requires qualified medical professionals for district and teaching hospitals across Punjab. Regular government position with pension benefits.' },
+                    { id: 3, title: 'Sub Inspector Police (BS-14)', department: 'Sindh Police Recruitment', location: 'Karachi, Hyderabad', education: 'Graduation (2nd Div)', deadline: '25 April 2026', ref: 'SPS-IND-2026', description: 'Physical endurance test followed by written examination through IBA Sukkur / Sindh Testing Service.' },
+                    { id: 4, title: 'Computer Programmer (BS-17)', department: 'KP Information Technology Board', location: 'Peshawar', education: 'BS Computer Science', deadline: '18 April 2026', ref: 'KPITB-2026-02', description: 'Seeking skilled software developers for e-governance initiatives and provincial digital portal expansion.' },
+                    { id: 5, title: 'Civil Engineer (BS-17)', department: 'National Highway Authority (NHA)', location: 'All Pakistan', education: 'B.Sc Civil Engineering', deadline: '30 April 2026', ref: 'NHA-HQ-2026', description: 'Recruitment for mega infrastructure and motorway expansion projects across Pakistan.' },
+                    { id: 6, title: 'Management Trainee Officers', department: 'National Bank of Pakistan (NBP)', location: 'Head Office Karachi', education: 'MBA / ACCA / MS', deadline: '22 April 2026', ref: 'NBP-MTO-2026', description: 'Premier banking career opportunity with structured professional development and lucrative remuneration.' }
+                ],
+
+                get filteredJobs() {
+                    return this.jobs.filter(job => {
+                        const matchesCategory = this.selectedJobCategory === 'all' || 
+                            (this.selectedJobCategory === 'federal' && job.department.includes('FPSC')) ||
+                            (this.selectedJobCategory === 'punjab' && job.department.includes('Punjab')) ||
+                            (this.selectedJobCategory === 'sindh' && job.department.includes('Sindh')) ||
+                            (this.selectedJobCategory === 'kpk' && job.department.includes('KP'));
+                        
+                        const matchesSearch = job.title.toLowerCase().includes(this.jobSearchQuery.toLowerCase()) ||
+                            job.department.toLowerCase().includes(this.jobSearchQuery.toLowerCase()) ||
+                            job.location.toLowerCase().includes(this.jobSearchQuery.toLowerCase());
+
+                        return matchesCategory && matchesSearch;
+                    });
+                },
+
+                schemes: [
+                    { title: 'Prime Minister Youth Loan Scheme', description: 'Interest-free and low-markup business loans up to Rs. 7.5 million for young entrepreneurs.', status: 'Active Applications', deadline: 'Ongoing 2026', icon: 'fa-solid fa-hand-holding-dollar' },
+                    { title: 'Punjab Chief Minister Laptop Scheme', description: 'Free high-spec laptops distributed among top position holder university and college students.', status: 'Phase IV Open', deadline: '30 April 2026', icon: 'fa-solid fa-laptop' },
+                    { title: 'Apna Ghar Apni Chhat Housing', description: 'Subsidized housing loans and constructed apartments for low-income families with easy installments.', status: 'District Verified', deadline: 'Open', icon: 'fa-solid fa-house-chimney' },
+                    { title: 'PM National Internship Program', description: 'Paid professional internships in federal government departments for fresh graduates.', status: 'Stipend Rs. 40,000/mo', deadline: '15 April 2026', icon: 'fa-solid fa-graduation-cap' }
+                ],
+
+                newsList: [
+                    { title: 'OGRA Announces Fortnightly Revision in Petroleum Product Prices', category: 'Energy', date: 'March 31, 2026', snippet: 'The Oil and Gas Regulatory Authority has announced a downward revision in petrol and diesel prices following international crude price trends.', source: 'Ministry of Finance' },
+                    { title: 'FPSC Announces CSS 2026 Written Examination Schedule and Centers', category: 'Education', date: 'March 30, 2026', snippet: 'Federal Public Service Commission has released roll number slips and examination centers for thousands of aspiring civil service candidates.', source: 'FPSC Islamabad' },
+                    { title: 'Pakistan Weather Dept Predicts Timely Monsoon Rains Across Punjab and Sindh', category: 'Weather', date: 'March 29, 2026', snippet: 'Meteorological department experts confirm favorable weather patterns indicating a healthy agricultural yield for the upcoming harvest season.', source: 'PMD Pakistan' }
+                ],
+
+                get filteredNews() {
+                    return this.newsList.filter(news => 
+                        news.title.toLowerCase().includes(this.newsSearchQuery.toLowerCase()) ||
+                        news.snippet.toLowerCase().includes(this.newsSearchQuery.toLowerCase()) ||
+                        news.category.toLowerCase().includes(this.newsSearchQuery.toLowerCase())
+                    );
+                },
+
+                openJobModal(job) {
+                    this.activeJob = job;
+                    this.jobModalOpen = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
